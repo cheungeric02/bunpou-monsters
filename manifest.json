@@ -1,7 +1,7 @@
 {
-  "name": "文法モンスターズ — Grammar Monsters",
-  "short_name": "文法モンスターズ",
-  "description": "Battle JLPT grammar as wild monsters. Beat them, catch them, master the language.",
+  "name": "妖怪文法 — Yōkai Bunpō",
+  "short_name": "妖怪文法",
+  "description": "Battle JLPT grammar as wild yōkai along the Spirit Line. Pacify them, record them in your bestiary, master the language.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

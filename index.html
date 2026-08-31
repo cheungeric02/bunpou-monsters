@@ -2,7 +2,7 @@
 <html lang="ja" data-theme="dark">
 <head>
 <meta charset="utf-8">
-<title>文法モンスターズ</title>
+<title>妖怪文法 — Yōkai Bunpō</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#15141c">
 <meta name="description" content="Battle JLPT grammar as wild monsters — a retro spaced-repetition RPG.">
@@ -107,20 +107,41 @@
   .backb:hover{background:var(--red);color:#fff}
   .body-scroll{overflow-y:auto;padding:14px;flex:1;min-height:0}
 
-  /* ---------- MAP / routes ---------- */
-  .routes{display:flex;flex-direction:column;gap:12px}
-  .route{display:flex;align-items:center;gap:12px;padding:12px;cursor:pointer}
-  .route .badge{width:52px;height:52px;flex:none;border-radius:8px;display:flex;align-items:center;justify-content:center;
-    font-family:var(--font-px);font-size:15px;color:#fff;border:3px solid var(--box-line)}
-  .route .meta{flex:1}
-  .route .meta .name{font-family:var(--font-px);font-size:12px;margin-bottom:6px}
-  .route .meta .desc{font-family:var(--font-read);font-size:12px;color:var(--ink-soft)}
-  .route.locked{opacity:.55;cursor:not-allowed}
-  .route .go{font-family:var(--font-px);font-size:9px;background:var(--ink);color:var(--lcd);padding:6px 8px;border-radius:5px}
-  .route.locked .go{background:var(--ink-soft)}
-  .pbar{height:12px;background:#cdd8b0;border:2px solid var(--box-line);border-radius:6px;overflow:hidden;margin-top:8px}
-  .pbar>span{display:block;height:100%;background:var(--good);transition:width .5s}
-  .mini{font-family:var(--font-read);font-size:11px;color:var(--ink-soft);margin-top:4px}
+  /* ---------- MAP / Spirit Line ---------- */
+  .routes{display:flex;flex-direction:column;gap:22px}
+  .line{}
+  .linehead{display:flex;align-items:center;gap:8px;margin:0 0 10px 2px}
+  .linebadge{width:14px;height:14px;border-radius:50%;flex:none;box-shadow:0 0 0 3px var(--box),0 0 0 5px var(--box-line)}
+  .linetitle{font-family:var(--font-px);font-size:11px}
+  .linetitle small{font-family:var(--font-read);font-size:10px;color:var(--ink-soft);letter-spacing:.5px}
+  .linestamp{margin-left:auto;font-family:var(--font-px);font-size:8px;color:var(--good)}
+  /* the rail */
+  .track{position:relative;display:flex;flex-direction:column;gap:10px}
+  .track::before{content:"";position:absolute;left:26px;top:28px;bottom:28px;width:5px;
+    background:repeating-linear-gradient(var(--box-line) 0 8px,transparent 8px 15px);border-radius:3px;z-index:0}
+  .station{position:relative;z-index:1;display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+    background:var(--box);border:3px solid var(--box-line);border-radius:12px;padding:9px 12px;cursor:pointer;
+    color:var(--ink);font-family:inherit}
+  .station .node{width:30px;height:30px;flex:none;border-radius:50%;background:var(--lcd2);
+    border:3px solid var(--box-line);display:flex;align-items:center;justify-content:center;font-size:15px;line-height:1}
+  .station.open .node{background:var(--good);color:#132}
+  .station.cleared .node{background:var(--warn)}
+  .station.boss .node{border-color:var(--red)}
+  .station.boss.open .node,.station.boss.cleared .node{background:var(--red);color:#fff}
+  .stinfo{flex:1;display:flex;flex-direction:column;gap:3px;min-width:0}
+  .stname{font-family:var(--font-px);font-size:11px;display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+  .stname small{font-family:var(--font-read);font-size:10px;color:var(--ink-soft);font-weight:normal}
+  .stprog{font-family:var(--font-read);font-size:11px;color:var(--ink-soft)}
+  .stgo{flex:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--font-px);font-size:12px;color:var(--ink)}
+  .stgo em{font-size:7px;font-style:normal;color:var(--ink-soft);letter-spacing:.5px}
+  .station.locked{opacity:.5;cursor:not-allowed}
+  .station.boss{border-color:var(--red)}
+  .station:not(.locked):hover{transform:translate(1px,1px);box-shadow:1px 1px 0 rgba(20,20,28,.25)}
+  .station:not(.locked):active{transform:translate(2px,2px);box-shadow:none}
+  .line.soon{opacity:.6}
+  .soonnote{font-family:var(--font-read);font-size:11px;color:var(--ink-soft);padding:8px 12px;
+    border:3px dashed var(--box-line);border-radius:12px;background:var(--box)}
+  .btn-ghost.home{font-size:13px;padding:2px 7px;border:2px solid var(--chrome-hover);line-height:1}
 
   .homegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
   .homegrid button{font-family:var(--font-px);font-size:10px;padding:14px 8px;border:3px solid var(--box-line);
@@ -187,7 +208,7 @@
   @keyframes pulseb{50%{transform:scale(1.02)}}
   @keyframes pop{0%{transform:scale(.5);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
 
-  /* ---------- POKEDEX ---------- */
+  /* ---------- BESTIARY (図鑑) ---------- */
   .dexfilter{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
   .dexfilter button{font-family:var(--font-px);font-size:8px;padding:6px 8px;border:2px solid var(--box-line);border-radius:5px;background:var(--box);cursor:pointer;color:var(--ink)}
   .dexfilter button.on{background:var(--ink);color:var(--lcd)}
@@ -262,7 +283,10 @@
 
 <div class="cabinet">
   <div class="brandbar">
-    <span><span class="dot"></span>文法モンスターズ</span>
+    <span style="display:flex;gap:6px;align-items:center">
+      <button class="btn-ghost home" id="homeBtn" title="Back to the line map" aria-label="Menu / line map">⌂</button>
+      <span class="dot"></span>妖怪文法
+    </span>
     <span style="display:flex;gap:2px;align-items:center">
       <button class="btn-ghost" id="furiBtn" title="Toggle furigana">ふりがな:ON</button>
       <button class="btn-ghost" id="soundBtn" title="Toggle sound">SOUND:ON</button>
@@ -278,10 +302,10 @@
 
     <!-- TITLE -->
     <section class="view" id="title">
-      <div class="logo">GRAMMAR<br>MONSTERS</div>
-      <div class="jp-logo">文法モンスターズ</div>
+      <div class="logo">YOKAI<br>BUNPO</div>
+      <div class="jp-logo">妖怪文法</div>
       <div class="starter" id="starterSprite">🐣</div>
-      <div class="tag">Battle JLPT grammar as wild monsters. Beat them, catch them, master the language.</div>
+      <div class="tag">Face JLPT grammar as wild yōkai. Defeat them, record them in your bestiary, master the language.</div>
       <div class="press">▶ PRESS START</div>
       <div class="savenote" id="saveLine">New trainer — a fresh adventure awaits.</div>
     </section>
@@ -295,7 +319,7 @@
       <div class="body-scroll">
         <div class="routes" id="routeList"></div>
         <div class="homegrid">
-          <button data-nav="dex"><span class="ic">📕</span>ずかん<br>POKÉDEX</button>
+          <button data-nav="dex"><span class="ic">📕</span>ずかん<br>BESTIARY</button>
           <button data-nav="lair"><span class="ic">💀</span>じゃくてん<br>WEAK LAIR</button>
         </div>
       </div>
@@ -312,16 +336,16 @@
         <div class="foe-status" id="foeSprite">👾</div>
         <div class="me-status" id="meSprite">🧑‍🎓</div>
         <div class="pbox me-info">
-          <div class="row1"><span class="me-name">TRAINER</span></div>
+          <div class="row1"><span class="me-name">TRAVELER</span></div>
           <div class="hearts" id="myHearts">❤️❤️❤️❤️❤️</div>
         </div>
       </div>
       <div class="dock" id="dock"></div>
     </section>
 
-    <!-- POKEDEX -->
+    <!-- BESTIARY -->
     <section class="view hidden" id="dex">
-      <div class="topbar"><button class="backb" data-nav="map">◀</button><h2>ずかん DEX</h2><span class="lv" id="dexCount"></span></div>
+      <div class="topbar"><button class="backb" data-nav="map">◀</button><h2>妖怪ずかん</h2><span class="lv" id="dexCount"></span></div>
       <div class="body-scroll">
         <div class="dexfilter" id="dexFilter"></div>
         <div class="dexgrid" id="dexGrid"></div>
@@ -347,7 +371,7 @@
     <div class="scrim hidden" id="syncScrim">
       <div class="pbox card">
         <div style="text-align:center;font-family:var(--font-px);font-size:11px;color:var(--red);letter-spacing:1px">☁ SYNC</div>
-        <p class="synchelp">Type the <b>same code</b> on every device to sync your Pokédex, streak &amp; progress through the cloud. Any secret word works.</p>
+        <p class="synchelp">Type the <b>same code</b> on every device to sync your bestiary, streak &amp; progress through the cloud. Any secret word works.</p>
         <input id="syncInput" class="syncinput" placeholder="your-secret-code" autocomplete="off" autocapitalize="off" spellcheck="false">
         <div id="syncStat" class="syncstat">📴 Local save only — not synced.</div>
         <button class="closeb" id="syncConnect" style="margin-top:12px">▶ つなぐ CONNECT</button>
@@ -360,7 +384,7 @@
 <script>
 "use strict";
 /* =========================================================
-   文法モンスターズ  —  data + engine
+   妖怪文法 / Yōkai Bunpō  —  data + engine
    Furigana markup:  {漢字|かんじ}   Blank in cloze: ＿
    ========================================================= */
 const TYPES = {
@@ -678,6 +702,50 @@ function levelProgress(lv){
   return{done,total:mons.length,pct:mons.length?Math.round(done/mons.length*100):0};
 }
 
+/* =========================================================
+   SPIRIT LINE  —  the map is a haunted train line.
+   Each line is a JLPT level; each station is a stop (a battle)
+   drawn from a contiguous, difficulty-ordered slice of that
+   level's mons. The last station of a line is the terminus boss.
+   Station tuple: [名前, English, howManyMons, isBoss?]
+   ========================================================= */
+const LINES=[
+  {key:"N5",name:"妖怪線",en:"SPIRIT LINE",color:"var(--t-grass)",stations:[
+    ["出発駅","Departure",6],
+    ["提灯町","Lantern Town",6],
+    ["霧ヶ原","Mist Field",6],
+    ["狐坂","Fox Slope",7],
+    ["百鬼横丁","Night Parade",7],
+    ["鳥居前","Terminus",6,true],
+  ]},
+  {key:"N4",name:"幽霊線",en:"GHOST LINE",color:"var(--t-water)",stations:[
+    ["影橋","Shadow Bridge",6],
+    ["骨川","Bone River",6],
+    ["鏡ヶ淵","Mirror Deep",6],
+    ["黄泉平坂","Underworld",7,true],
+  ]},
+];
+function buildStations(){
+  const out=[];
+  LINES.forEach(line=>{
+    const mons=byLevel(line.key); let pos=0;
+    line.stations.forEach(s=>{
+      const [name,en,n,boss]=s;
+      out.push({line:line.key,lineName:line.name,lineEn:line.en,color:line.color,
+                name,en,boss:!!boss,mons:mons.slice(pos,pos+n),idx:out.length});
+      pos+=n;
+    });
+  });
+  return out;
+}
+const STATIONS=buildStations();
+const stationProg=st=>({done:st.mons.filter(m=>srsOf(m.id).mastered).length,total:st.mons.length});
+const stationCleared=st=>st.mons.length>0 && st.mons.every(m=>srsOf(m.id).mastered);
+const stationSeen=st=>st.mons.length>0 && st.mons.every(m=>srsOf(m.id).seen);
+/* a station opens once every mon in the previous stop has been recorded (seen) —
+   the chain still means you must have ridden the whole line so far to reach it */
+const stationUnlocked=i=>i===0 || stationSeen(STATIONS[i-1]);
+
 /* ---------------- helpers ---------------- */
 const $=s=>document.querySelector(s);
 const views=["title","map","battle","dex","lair","results"];
@@ -707,25 +775,23 @@ const sHit=()=>{beep(660,.07,"square");},
    BATTLE ENGINE
    ========================================================= */
 let B=null; // battle session
-function buildQueue(lv){
+function buildQueue(mons){
   const t=todayNum();
-  const mons=byLevel(lv).map(m=>({m,s:srsOf(m.id)}));
-  const due=mons.filter(o=>o.s.seen && o.s.due<=t && !o.s.mastered);
-  const fresh=mons.filter(o=>!o.s.seen);
-  const learning=mons.filter(o=>o.s.seen && !o.s.mastered && o.s.due>t);
+  const arr=mons.map(m=>({m,s:srsOf(m.id)}));
+  const due=arr.filter(o=>o.s.seen && o.s.due<=t && !o.s.mastered);
+  const fresh=arr.filter(o=>!o.s.seen);
+  const learning=arr.filter(o=>o.s.seen && !o.s.mastered && o.s.due>t);
   // priority: due (weak) first, then some new, cap the session
   let q=[...due];
   for(const f of fresh){ if(q.length>=8)break; q.push(f); }
   if(q.length<5){ for(const l of learning){ if(q.length>=6)break; q.push(l); } }
-  if(!q.length){ // all mastered/none due → free practice on a few
-    q=mons.slice().sort(()=>0).slice(0,6);
-  }
+  if(!q.length){ q=arr.slice(0,6); } // all mastered → free practice ride
   return q.map(o=>o.m);
 }
-function startRoute(lv){
-  const queue=buildQueue(lv);
-  if(!queue.length){toast("NOTHING TO TRAIN!");return;}
-  B={lv,queue,idx:0,hearts:5,maxHearts:5,defeated:[],caught:[],correct:0,total:0};
+function startStation(st){
+  const queue=buildQueue(st.mons);
+  if(!queue.length){toast("この駅は クリア済み！");return;}
+  B={station:st,lv:st.line,boss:st.boss,queue,idx:0,hearts:5,maxHearts:5,defeated:[],caught:[],correct:0,total:0,_cleared:stationCleared(st)};
   show("battle");
   nextFoe();
 }
@@ -734,14 +800,15 @@ function nextFoe(){
   const m=B.queue[B.idx];
   const st=srsOf(m.id);
   const lvl=Math.max(1,Math.min(9,st.reps+1));
-  B.foe={m,st,lvl,maxHp:2+Math.min(2,Math.floor(st.reps/1)|0)+ (m.lvl==="N4"?1:0),hp:0,qi:Math.floor(0)};
-  B.foe.maxHp=Math.max(2,Math.min(4, (m.lvl==="N4"?3:2) )); // 2-3 hits
+  B.foe={m,st,lvl,hp:0};
+  B.foe.maxHp=Math.max(2,Math.min(5,(m.lvl==="N4"?3:2)+(B.boss?1:0))); // 2-3 hits, +1 at a terminus
   B.foe.hp=B.foe.maxHp;
   B.qorder=shuffleSeed(m.qs.length, m.id.length+B.idx);
   B.qpos=0;
   renderFoe();
   const first = !st.seen;
-  dialogue((first?"あ！ やせいの ":"") + m.jp + (first?" が とびだしてきた！":" が また あらわれた！"),()=>askQuestion());
+  const bossHint = (B.boss && B.idx===0) ? "🚉 しゅうてん… " : "";
+  dialogue(bossHint + (first?"あ！ やせいの ":"") + m.jp + (first?" が とびだしてきた！":" が また あらわれた！"),()=>askQuestion());
 }
 function shuffleSeed(n,seed){const a=[...Array(n).keys()];for(let i=n-1;i>0;i--){seed=(seed*9301+49297)%233280;const j=seed%(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
 
@@ -845,7 +912,7 @@ function defeatFoe(){
   save();
   sWin();
   // catch / faint sequence
-  const verb = caught? "を つかまえた！" : "を たおした！";
+  const verb = caught? "を 図鑑に しるした！" : "を しずめた！";
   dialogue(m.jp+verb,()=>{
     if(caught){ showCatchCard(m,st,()=>advance()); }
     else if(B.foe.justMastered){ toast("🏅 マスター！ "+m.jp); setTimeout(advance,400); }
@@ -854,23 +921,28 @@ function defeatFoe(){
   function advance(){ B.idx++; checkBadge(); nextFoe(); }
 }
 function checkBadge(){
-  const p=levelProgress(B.lv);
-  if(p.total && p.done===p.total && !S.badges[B.lv]){
-    S.badges[B.lv]=true;save();
-    toast("🏅 "+B.lv+" ジム クリア！",2200);
+  // did this station just get fully pacified?
+  if(B.station && !B._cleared && stationCleared(B.station)){
+    B._cleared=true;
+    toast("🏮 "+B.station.name+" クリア！",2000);
+    // terminus boss cleared → the whole line is conquered
+    if(B.station.boss && !S.badges[B.lv]){
+      S.badges[B.lv]=true;save();
+      setTimeout(()=>toast("🏅 "+B.station.lineEn+" せいは！",2400),600);
+    }
   }
 }
 function showCatchCard(m,st,then){
   const ty=TYPES[m.type];
   $("#scrim").classList.remove("hidden");
   $("#scrim").innerHTML=`<div class="pbox card">
-    <div style="text-align:center;font-family:var(--font-px);font-size:9px;color:var(--red)">✦ NEW! ✦</div>
+    <div style="text-align:center;font-family:var(--font-px);font-size:9px;color:var(--red)">✦ はっけん！ ✦</div>
     <div class="spr">${sprMarkup(m.id,m.spr,64)}</div>
     <h3>${furi(m.jp)}</h3>
     <div class="rd"><span class="typechip" style="background:${ty.color}">${ty.emoji} ${ty.label}</span> ・ ${m.lvl}</div>
     <div class="gloss">${m.gloss}</div>
     <div class="exline">${furi(m.qs[0].s.replace("＿",'<b style="color:var(--red)">'+m.qs[0].c[m.qs[0].a]+'</b>'))}</div>
-    <button class="closeb" id="cardclose">▶ POKÉDEX に とうろく</button>
+    <button class="closeb" id="cardclose">▶ 図鑑に しるす</button>
   </div>`;
   $("#cardclose").onclick=()=>{sSelect();$("#scrim").classList.add("hidden");$("#scrim").innerHTML="";then();};
 }
@@ -880,16 +952,16 @@ function endRoute(cleared){
   show("results");
   const acc=B.total?Math.round(B.correct/B.total*100):0;
   const caughtHtml=B.caught.length?`<div class="caught-row">${B.caught.map((m,i)=>`<span class="c" style="animation-delay:${i*.08}s">${sprMarkup(m.id,m.spr,34)}</span>`).join("")}</div>`:"";
-  const title = cleared? "ROUTE CLEAR!" : "きぜつ… RETREAT";
+  const title = cleared? "STATION CLEAR!" : "きぜつ… RETREAT";
   $("#results").innerHTML=`
     <div class="big">${title}</div>
     ${caughtHtml}
     <div class="rstats">
-      <div class="rstat"><div class="n">${B.defeated.length}</div><div class="l">たおした</div></div>
-      <div class="rstat"><div class="n">${B.caught.length}</div><div class="l">つかまえた</div></div>
+      <div class="rstat"><div class="n">${B.defeated.length}</div><div class="l">しずめた</div></div>
+      <div class="rstat"><div class="n">${B.caught.length}</div><div class="l">きろく</div></div>
       <div class="rstat"><div class="n">${acc}%</div><div class="l">せいかいりつ</div></div>
     </div>
-    <button class="primaryb" id="resback">▶ MAP に もどる</button>`;
+    <button class="primaryb" id="resback">▶ 路線図に もどる</button>`;
   $("#resback").onclick=()=>{sSelect();goMap();};
   if(cleared)sWin();
 }
@@ -907,31 +979,49 @@ function markStreak(){
 function goMap(){
   show("map");applyFuri();
   $("#streakPill").textContent="🔥 "+(S.streak||0);
-  const list=$("#routeList");list.innerHTML="";
-  LEVELS.forEach(lv=>{
-    const mons=byLevel(lv);
-    const unlocked=levelUnlocked(lv)&&mons.length>0;
-    const p=levelProgress(lv);
-    const badge=S.badges[lv]?"🏅":lv;
-    const colors={N5:"var(--t-grass)",N4:"var(--t-water)",N3:"var(--t-ghost)"};
-    const div=document.createElement("div");
-    div.className="pbox route"+(unlocked?"":" locked");
-    div.innerHTML=`
-      <div class="badge" style="background:${colors[lv]}">${badge}</div>
-      <div class="meta">
-        <div class="name">${lv} ロード</div>
-        ${mons.length?`<div class="pbar"><span style="width:${p.pct}%"></span></div>
-        <div class="mini">${p.done}/${p.total} マスター ${S.badges[lv]?"・ジム制覇🏅":""}</div>`
-        :`<div class="desc">Coming soon — more monsters incoming.</div>`}
-      </div>
-      <div class="go">${unlocked?"▶ GO":(mons.length?"🔒":"…")}</div>`;
-    if(unlocked)div.onclick=()=>{sSelect();startRoute(lv);};
-    else if(mons.length)div.onclick=()=>toast("Clear "+LEVELS[LEVELS.indexOf(lv)-1]+" first!");
-    list.appendChild(div);
+  const host=$("#routeList");host.innerHTML="";
+  LINES.forEach(line=>{
+    const sts=STATIONS.filter(s=>s.line===line.key);
+    const lineDone=sts.every(stationCleared);
+    const wrap=document.createElement("div");
+    wrap.className="line"+(lineDone?" done":"");
+    let html=`<div class="linehead">
+        <span class="linebadge" style="background:${line.color}"></span>
+        <span class="linetitle">${line.name} <small>${line.en}・${line.key}</small></span>
+        ${lineDone?'<span class="linestamp">🏅 せいは</span>':''}
+      </div><div class="track">`;
+    sts.forEach(st=>{
+      const i=st.idx, open=stationUnlocked(i), cleared=stationCleared(st), pr=stationProg(st);
+      const state=cleared?"cleared":open?"open":"locked";
+      const face=cleared?"🏮":st.boss?"⛩":open?"●":"🔒";
+      const status=cleared?"クリア":open?(st.boss?"ボス":"あそぶ"):"ロック";
+      html+=`<button class="station ${state}${st.boss?' boss':''}" data-st="${i}" ${open?'':'disabled'}>
+          <span class="node">${face}</span>
+          <span class="stinfo">
+            <span class="stname">${st.name}<small>${st.en}</small></span>
+            <span class="stprog">${open?`${pr.done}/${pr.total} マスター`:'まだ 開通していない'}</span>
+          </span>
+          <span class="stgo">${open?(cleared?'⟳':'▶'):''}<em>${status}</em></span>
+        </button>`;
+    });
+    html+=`</div>`;
+    wrap.innerHTML=html;
+    host.appendChild(wrap);
+  });
+  // future line teaser
+  const soon=document.createElement("div");
+  soon.className="line soon";
+  soon.innerHTML=`<div class="linehead">
+      <span class="linebadge" style="background:var(--t-ghost)"></span>
+      <span class="linetitle">奈落線 <small>ABYSS LINE・N3</small></span>
+    </div><div class="soonnote">まだ 開通していない路線。近日 開通。</div>`;
+  host.appendChild(soon);
+  host.querySelectorAll(".station:not([disabled])").forEach(b=>{
+    b.onclick=()=>{sSelect();startStation(STATIONS[+b.dataset.st]);};
   });
 }
 
-/* POKEDEX */
+/* BESTIARY */
 let dexFilterLv="ALL";
 function goDex(){
   show("dex");applyFuri();
@@ -1005,6 +1095,11 @@ document.querySelectorAll("[data-nav]").forEach(b=>b.onclick=()=>{
   if(n==="map")goMap();else if(n==="dex")goDex();else if(n==="lair")goLair();
 });
 
+$("#homeBtn").onclick=()=>{
+  sSelect();
+  if(B){ if(!confirm("この駅を やめて 路線図に もどる？")) return; B=null; }
+  goMap();
+};
 $("#furiBtn").onclick=()=>{S.furi=!S.furi;save();applyFuri();sSelect();};
 $("#soundBtn").onclick=()=>{S.sound=!S.sound;save();$("#soundBtn").textContent="SOUND:"+(S.sound?"ON":"OFF");if(S.sound)sSelect();};
 $("#resetBtn").onclick=()=>{
@@ -1012,7 +1107,7 @@ $("#resetBtn").onclick=()=>{
 };
 function updateSaveLine(){
   const seen=DEX.filter(m=>srsOf(m.id).seen).length;
-  $("#saveLine").textContent = seen? `Continue — ${seen}/${DEX.length} caught ・ 🔥${S.streak||0} streak` : "New trainer — a fresh adventure awaits.";
+  $("#saveLine").textContent = seen? `Continue — ${seen}/${DEX.length} recorded ・ 🔥${S.streak||0} streak` : "New traveler — a fresh adventure awaits.";
 }
 
 /* =========================================================
