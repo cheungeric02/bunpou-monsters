@@ -107,38 +107,38 @@
   .backb:hover{background:var(--red);color:#fff}
   .body-scroll{overflow-y:auto;padding:14px;flex:1;min-height:0}
 
-  /* ---------- MAP / Spirit Line ---------- */
-  .routes{display:flex;flex-direction:column;gap:22px}
-  .line{}
-  .linehead{display:flex;align-items:center;gap:8px;margin:0 0 10px 2px}
-  .linebadge{width:14px;height:14px;border-radius:50%;flex:none;box-shadow:0 0 0 3px var(--box),0 0 0 5px var(--box-line)}
-  .linetitle{font-family:var(--font-px);font-size:11px}
-  .linetitle small{font-family:var(--font-read);font-size:10px;color:var(--ink-soft);letter-spacing:.5px}
-  .linestamp{margin-left:auto;font-family:var(--font-px);font-size:8px;color:var(--good)}
-  /* the rail */
-  .track{position:relative;display:flex;flex-direction:column;gap:10px}
-  .track::before{content:"";position:absolute;left:26px;top:28px;bottom:28px;width:5px;
-    background:repeating-linear-gradient(var(--box-line) 0 8px,transparent 8px 15px);border-radius:3px;z-index:0}
-  .station{position:relative;z-index:1;display:flex;align-items:center;gap:12px;width:100%;text-align:left;
-    background:var(--box);border:3px solid var(--box-line);border-radius:12px;padding:9px 12px;cursor:pointer;
-    color:var(--ink);font-family:inherit}
-  .station .node{width:30px;height:30px;flex:none;border-radius:50%;background:var(--lcd2);
-    border:3px solid var(--box-line);display:flex;align-items:center;justify-content:center;font-size:15px;line-height:1}
-  .station.open .node{background:var(--good);color:#132}
-  .station.cleared .node{background:var(--warn)}
-  .station.boss .node{border-color:var(--red)}
-  .station.boss.open .node,.station.boss.cleared .node{background:var(--red);color:#fff}
-  .stinfo{flex:1;display:flex;flex-direction:column;gap:3px;min-width:0}
-  .stname{font-family:var(--font-px);font-size:11px;display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
-  .stname small{font-family:var(--font-read);font-size:10px;color:var(--ink-soft);font-weight:normal}
-  .stprog{font-family:var(--font-read);font-size:11px;color:var(--ink-soft)}
-  .stgo{flex:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--font-px);font-size:12px;color:var(--ink)}
-  .stgo em{font-size:7px;font-style:normal;color:var(--ink-soft);letter-spacing:.5px}
-  .station.locked{opacity:.5;cursor:not-allowed}
-  .station.boss{border-color:var(--red)}
-  .station:not(.locked):hover{transform:translate(1px,1px);box-shadow:1px 1px 0 rgba(20,20,28,.25)}
-  .station:not(.locked):active{transform:translate(2px,2px);box-shadow:none}
-  .line.soon{opacity:.6}
+  /* ---------- MAP / Tokyo Spirit Line ---------- */
+  .routes{display:flex;flex-direction:column;gap:20px}
+  .mline{border:3px solid var(--box-line);border-radius:14px;background:var(--box);overflow:hidden}
+  .mline.locked{opacity:.62}
+  .mlinehead{display:flex;align-items:center;gap:9px;padding:9px 12px;border-bottom:3px solid var(--box-line)}
+  .mlinehead .bullet{width:26px;height:26px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-px);font-size:8px;color:#fff;border:3px solid rgba(255,255,255,.55);box-shadow:0 0 0 2px var(--box-line)}
+  .mlinetitle{font-family:var(--font-px);font-size:11px;line-height:1.5}
+  .mlinetitle small{display:block;font-family:var(--font-read);font-size:10px;color:var(--ink-soft);letter-spacing:.5px}
+  .mlinestamp{margin-left:auto;font-family:var(--font-px);font-size:8px;color:var(--good)}
+  .mlinelock{margin-left:auto;font-family:var(--font-read);font-size:10px;color:var(--ink-soft)}
+  /* the rail: stops flow horizontally, wrapping, threaded by a colored line */
+  .mtrack{position:relative;display:flex;flex-wrap:wrap;gap:14px 4px;padding:16px 14px 14px}
+  .mstation{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:5px;
+    width:70px;background:none;border:none;cursor:pointer;color:var(--ink);font-family:inherit;padding:0}
+  .mstation .rail{position:absolute;top:15px;left:-2px;right:-2px;height:5px;background:var(--rail,#888);z-index:0;border-radius:3px}
+  .mstation:first-child .rail{left:50%}
+  .mstation:last-child .rail{right:50%}
+  .mstation .dot{position:relative;z-index:1;width:32px;height:32px;border-radius:50%;background:var(--lcd);
+    border:4px solid var(--rail,#888);display:flex;align-items:center;justify-content:center;font-size:15px;line-height:1;
+    box-shadow:0 2px 0 rgba(20,20,28,.2)}
+  .mstation.open .dot{background:#fff}
+  .mstation.cleared .dot{background:var(--warn);border-color:var(--warn)}
+  .mstation.boss .dot{width:36px;height:36px;border-style:double;border-width:6px}
+  .mstation.locked{opacity:.45;cursor:not-allowed}
+  .mstation .slabel{font-family:var(--font-jp);font-size:11px;font-weight:700;line-height:1.15;text-align:center;
+    max-width:74px;word-break:break-word}
+  .mstation .srom{font-family:var(--font-px);font-size:6px;color:var(--ink-soft);letter-spacing:.3px;text-align:center}
+  .mstation:not(.locked):hover .dot{transform:translateY(-2px)}
+  .mstation:not(.locked):hover .slabel{color:var(--red)}
+  .mlinefoot{font-family:var(--font-read);font-size:10px;color:var(--ink-soft);padding:0 14px 12px}
+  .line.soon,.mline.soon{opacity:.6}
   .soonnote{font-family:var(--font-read);font-size:11px;color:var(--ink-soft);padding:8px 12px;
     border:3px dashed var(--box-line);border-radius:12px;background:var(--box)}
   .btn-ghost.home{font-size:13px;padding:2px 7px;border:2px solid var(--chrome-hover);line-height:1}
@@ -154,10 +154,23 @@
 
   /* ---------- BATTLE ---------- */
   #battle{background:linear-gradient(180deg,var(--lcd-sky) 0%,#dcecc4 62%,var(--lcd-ground) 62%,#bcd894 100%)}
-  .arena{flex:1;position:relative;padding:14px 14px 4px;min-height:210px}
+  .arena{flex:1;position:relative;padding:14px 14px 4px;min-height:210px;overflow:hidden}
+  /* pixel backdrop drawn per-station */
+  #sceneBg{position:absolute;inset:0;width:100%;height:100%;z-index:0;
+    image-rendering:pixelated;image-rendering:crisp-edges}
+  .arena::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(180deg,rgba(230,239,212,.28) 0%,rgba(230,239,212,.05) 45%,rgba(203,224,166,.22) 100%)}
+  .arena>*:not(#sceneBg){position:relative;z-index:2}
+  .placard{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:3;
+    display:flex;align-items:center;gap:6px;background:var(--ink);color:var(--lcd);
+    font-family:var(--font-px);font-size:7px;letter-spacing:.5px;padding:4px 9px;border-radius:20px;
+    box-shadow:0 2px 0 rgba(20,20,28,.3);white-space:nowrap}
+  .placard b{width:9px;height:9px;border-radius:50%;flex:none}
+  .placard .pj{font-family:var(--font-jp);font-size:10px}
   /* enemy */
-  .enemy-info{position:absolute;left:14px;top:14px;width:60%;padding:8px 10px}
-  .foe-status{position:absolute;right:14px;top:96px;font-size:52px;line-height:1;
+  .enemy-info{position:absolute;left:14px;top:30px;width:60%;padding:8px 10px;
+    background:rgba(230,239,212,.72);border-radius:9px}
+  .foe-status{position:absolute;right:14px;top:104px;font-size:52px;line-height:1;
     filter:drop-shadow(2px 3px 0 rgba(36,32,24,.28));animation:bob 2s ease-in-out infinite}
   .enemy-info .row1{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
   .grammar-name{font-family:var(--font-jp);font-weight:700;font-size:19px;color:var(--ink)}
@@ -168,7 +181,8 @@
   .hptrack{flex:1;height:9px;background:#7d8a5f;border:2px solid var(--box-line);border-radius:5px;overflow:hidden}
   .hptrack>span{display:block;height:100%;width:100%;background:var(--good);transition:width .45s ease}
   /* player side */
-  .me-info{position:absolute;right:14px;bottom:6px;width:58%;padding:8px 10px}
+  .me-info{position:absolute;right:14px;bottom:6px;width:58%;padding:8px 10px;
+    background:rgba(230,239,212,.72);border-radius:9px}
   .me-status{position:absolute;left:16px;bottom:8px;font-size:46px;line-height:1;filter:drop-shadow(2px 3px 0 rgba(36,32,24,.28))}
   .me-info .row1{display:flex;justify-content:space-between;align-items:baseline}
   .me-name{font-family:var(--font-px);font-size:9px}
@@ -313,7 +327,7 @@
     <!-- MAP / HOME -->
     <section class="view hidden" id="map">
       <div class="topbar">
-        <h2>フィールド MAP</h2>
+        <h2>路線図 ROUTE MAP</h2>
         <span class="streakpill" id="streakPill">🔥 0</span>
       </div>
       <div class="body-scroll">
@@ -328,6 +342,8 @@
     <!-- BATTLE -->
     <section class="view hidden" id="battle">
       <div class="arena" id="arena">
+        <canvas id="sceneBg" width="64" height="64"></canvas>
+        <div class="placard" id="placard"><b id="placardDot"></b><span class="pj" id="placardJp">東京駅</span><span id="placardRom">TOKYO STN</span></div>
         <div class="pbox enemy-info">
           <div class="row1"><span class="grammar-name" id="foeName">〜</span><span class="lv" id="foeLv">Lv.1</span></div>
           <span class="typechip" id="foeType">TYPE</span>
@@ -703,48 +719,183 @@ function levelProgress(lv){
 }
 
 /* =========================================================
-   SPIRIT LINE  —  the map is a haunted train line.
-   Each line is a JLPT level; each station is a stop (a battle)
-   drawn from a contiguous, difficulty-ordered slice of that
-   level's mons. The last station of a line is the terminus boss.
-   Station tuple: [名前, English, howManyMons, isBoss?]
+   TOKYO SPIRIT LINE  —  the map is the Tokyo rail network.
+   Every grammar point is a STATION at a real Tokyo landmark,
+   home to a native yōkai. Stations are grouped into named
+   train lines; the last stop of each line is a BOSS. Clearing
+   the final NOZOMI stop (Tokyo Tower) opens the N4 lines.
+   Row: [grammarId, 駅名(JP), ROMAJI, sceneKey, isBoss?]
    ========================================================= */
-const LINES=[
-  {key:"N5",name:"妖怪線",en:"SPIRIT LINE",color:"var(--t-grass)",stations:[
-    ["出発駅","Departure",6],
-    ["提灯町","Lantern Town",6],
-    ["霧ヶ原","Mist Field",6],
-    ["狐坂","Fox Slope",7],
-    ["百鬼横丁","Night Parade",7],
-    ["鳥居前","Terminus",6,true],
+const TLINES=[
+  {lv:"N5",code:"LOCAL",jp:"各駅停車",en:"LOCAL",color:"#5aa96a",st:[
+    ["desu","東京駅","TOKYO STN","station"],
+    ["wo","豊洲市場","TOYOSU MKT","market"],
+    ["mo","アメ横","AMEYOKO","market"],
+    ["ni-de","新宿駅","SHINJUKU","station"],
+    ["kara-made","山手線","YAMANOTE","station"],
+    ["tai","明治神宮","MEIJI JINGU","shrine"],
+    ["hoshii","銀座","GINZA","neon",1],
   ]},
-  {key:"N4",name:"幽霊線",en:"GHOST LINE",color:"var(--t-water)",stations:[
-    ["影橋","Shadow Bridge",6],
-    ["骨川","Bone River",6],
-    ["鏡ヶ淵","Mirror Deep",6],
-    ["黄泉平坂","Underworld",7,true],
+  {lv:"N5",code:"RAPID",jp:"快速",en:"RAPID",color:"#e2584d",st:[
+    ["masenka","ゴールデン街","GOLDEN GAI","neon"],
+    ["masho","渋谷","SHIBUYA","neon"],
+    ["teiru","隅田川","SUMIDA RIVER","water"],
+    ["tekudasai","雷門","KAMINARIMON","shrine"],
+    ["temoii","皇居庭園","PALACE GDN","park"],
+    ["tewaikenai","皇居","IMPERIAL PAL","park"],
+    ["tekara","仲見世通り","NAKAMISE","market"],
+    ["nakereba","両国","RYOGOKU","station",1],
+  ]},
+  {lv:"N5",code:"EXPRESS",jp:"急行",en:"EXPRESS",color:"#f2a95a",st:[
+    ["nakutemo","大江戸温泉","OEDO ONSEN","onsen"],
+    ["maeni","増上寺","ZOJO-JI","shrine"],
+    ["atode","思い出横丁","OMOIDE YOKO","market"],
+    ["nagara","代々木公園","YOYOGI PARK","park"],
+    ["takoto","谷中","YANAKA","shrine"],
+    ["tari","竹下通り","TAKESHITA","market"],
+    ["toomou","後楽園","KORAKUEN","park"],
+    ["toiu","浅草演芸","ASAKUSA","market",1],
+  ]},
+  {lv:"N5",code:"LTD",jp:"特急",en:"LTD EXPRESS",color:"#3a8fd0",st:[
+    ["desho","スカイツリー","SKYTREE","skytree"],
+    ["hoga","神田明神","KANDA MYOJIN","shrine"],
+    ["tsumori","日本橋","NIHONBASHI","water"],
+    ["kara-r","御茶ノ水","OCHANOMIZU","water"],
+    ["node","神保町","JINBOCHO","market"],
+    ["kedo","下北沢","SHIMOKITA","market"],
+    ["tara","お台場","ODAIBA","water",1],
+  ]},
+  {lv:"N5",code:"NOZOMI",jp:"のぞみ",en:"NOZOMI",color:"#b043c0",st:[
+    ["ba","レインボーブリッジ","RAINBOW BR","water"],
+    ["to-cond","teamLab","TEAMLAB","neon"],
+    ["naru","中目黒","NAKAMEGURO","sakura"],
+    ["sugiru","歌舞伎町","KABUKICHO","neon"],
+    ["yasui","神楽坂","KAGURAZAKA","market"],
+    ["kata","かっぱ橋","KAPPABASHI","market"],
+    ["nogasuki","井の頭","INOKASHIRA","sakura"],
+    ["kotogadekiru","東京タワー","TOKYO TOWER","tower",1],
+  ]},
+  {lv:"N4",code:"SUBURB",jp:"郊外線",en:"SUBURBAN",color:"#2f9f8f",st:[
+    ["younninaru","吉祥寺","KICHIJOJI","market"],
+    ["younisuru","三鷹の森","MITAKA","park"],
+    ["tameni","高尾山","TAKAO-SAN","shrine"],
+    ["noni-though","江ノ島","ENOSHIMA","water"],
+    ["souda-look","鎌倉大仏","KAMAKURA","shrine"],
+    ["souda-hear","横浜中華街","YOKO CHINA","neon"],
+    ["rashii","みなとみらい","MINATOMIRAI","neon"],
+    ["mitai","お台場海浜","ODAIBA BEACH","water"],
+    ["hazu","川越","KAWAGOE","market"],
+    ["kamoshirenai","秩父","CHICHIBU","park"],
+    ["teshimau","高尾温泉","TAKAO ONSEN","onsen"],
+    ["teoku","立川","TACHIKAWA","station"],
+    ["temiru","深大寺","JINDAIJI","shrine",1],
+  ]},
+  {lv:"N4",code:"ROMANCE",jp:"特急ロマンス",en:"ROMANCE CAR",color:"#caa43a",st:[
+    ["saseru","箱根","HAKONE","onsen"],
+    ["rareru-pass","富士山","FUJI-SAN","park"],
+    ["saserareru","日光東照宮","NIKKO","shrine"],
+    ["nasai","江戸東京博物館","EDO MUSEUM","station"],
+    ["bahodo","東京ドーム","TOKYO DOME","neon"],
+    ["baai","秋葉原","AKIHABARA","neon"],
+    ["mama","池袋","IKEBUKURO","neon"],
+    ["garu","上野公園","UENO PARK","sakura"],
+    ["kuseni","谷根千","YANESEN","market"],
+    ["bayokatta","築地","TSUKIJI","market"],
+    ["keigo-o","帝国ホテル","IMPERIAL HTL","neon"],
+    ["keigo-itadaku","迎賓館","GUEST HOUSE","shrine",1],
   ]},
 ];
+const monById=id=>DEX.find(m=>m.id===id);
 function buildStations(){
   const out=[];
-  LINES.forEach(line=>{
-    const mons=byLevel(line.key); let pos=0;
-    line.stations.forEach(s=>{
-      const [name,en,n,boss]=s;
-      out.push({line:line.key,lineName:line.name,lineEn:line.en,color:line.color,
-                name,en,boss:!!boss,mons:mons.slice(pos,pos+n),idx:out.length});
-      pos+=n;
+  TLINES.forEach(line=>{
+    line.st.forEach(row=>{
+      const [id,jp,rom,scene,boss]=row;
+      const m=monById(id);
+      out.push({line:line.code,lineJp:line.jp,lineEn:line.en,lv:line.lv,color:line.color,
+                jp,rom,scene,boss:!!boss,mon:m,mons:m?[m]:[],idx:out.length});
     });
   });
   return out;
 }
 const STATIONS=buildStations();
+const LAST_IDX={N5:STATIONS.filter(s=>s.lv==="N5").slice(-1)[0].idx,
+                N4:STATIONS.filter(s=>s.lv==="N4").slice(-1)[0].idx};
 const stationProg=st=>({done:st.mons.filter(m=>srsOf(m.id).mastered).length,total:st.mons.length});
 const stationCleared=st=>st.mons.length>0 && st.mons.every(m=>srsOf(m.id).mastered);
 const stationSeen=st=>st.mons.length>0 && st.mons.every(m=>srsOf(m.id).seen);
-/* a station opens once every mon in the previous stop has been recorded (seen) —
-   the chain still means you must have ridden the whole line so far to reach it */
-const stationUnlocked=i=>i===0 || stationSeen(STATIONS[i-1]);
+/* a stop opens once the previous stop's grammar has been recorded (seen); N4 lines
+   stay sealed until the whole N5 network is mastered (Tokyo Tower cleared) */
+function stationUnlocked(i){
+  const st=STATIONS[i];
+  if(st.lv==="N4" && !levelUnlocked("N4")) return false;
+  return i===0 || stationSeen(STATIONS[i-1]);
+}
+
+/* =========================================================
+   STATION BACKDROPS — 64×64 pixel scenes drawn behind battles
+   ========================================================= */
+function band(x,y,h,c){x.fillStyle=c;x.fillRect(0,y,64,h);}
+const BG={
+  station:function(x){band(x,0,30,'#b7c8d6');band(x,30,10,'#9fb0be');band(x,40,10,'#6d7d8a');band(x,50,14,'#4c5763');
+    x.fillStyle='#c9b78f';x.fillRect(0,46,64,4);x.fillStyle='#e8dcbf';x.fillRect(0,44,64,2);         // platform
+    x.fillStyle='#3a424c';x.fillRect(0,54,64,6);x.fillStyle='#5a636e';for(var i=0;i<8;i++)x.fillRect(2+i*8,55,3,4); // tracks
+    x.fillStyle='#4c9f5a';x.fillRect(6,30,42,16);x.fillStyle='#2f7a40';x.fillRect(6,30,42,3);         // train car
+    x.fillStyle='#cdeefb';x.fillRect(10,34,8,7);x.fillRect(22,34,8,7);x.fillRect(34,34,8,7);
+    x.fillStyle='#ffd86b';x.fillRect(46,40,2,3);},
+  market:function(x){band(x,0,26,'#3a2740');band(x,26,12,'#5a3548');band(x,38,26,'#7a4a3a');
+    x.fillStyle='#2a1c30';x.fillRect(0,18,20,20);x.fillRect(24,14,16,24);x.fillRect(44,20,20,18);     // stalls
+    x.fillStyle='#c0453a';x.fillRect(0,36,64,4);x.fillStyle='#e8dcbf';x.fillRect(0,40,64,2);          // awning
+    var lx=[8,20,32,44,56];for(var i=0;i<lx.length;i++){x.fillStyle='#3a2740';x.fillRect(lx[i]-1,20,3,2);
+      x.fillStyle='#e2584d';x.fillRect(lx[i]-2,22,5,7);x.fillStyle='#ffd86b';x.fillRect(lx[i]-1,24,3,3);} // lanterns
+    x.fillStyle='#5a3a2f';x.fillRect(0,52,64,12);},
+  neon:function(x){band(x,0,40,'#241b3a');band(x,40,8,'#3a2757');band(x,48,16,'#2a2440');
+    x.fillStyle='#161028';x.fillRect(2,12,16,28);x.fillRect(46,6,16,34);x.fillRect(22,18,12,22);      // towers
+    var neon=['#ff5bd0','#5bd9ff','#ffe36b'];for(var i=0;i<26;i++){x.fillStyle=neon[i%3];
+      x.fillRect(4+(i%4)*4,15+Math.floor(i/4)*4,2,2);x.fillRect(48+(i%4)*3,9+Math.floor(i/4)*4,2,2);}
+    x.fillStyle='#e9ecf5';for(var s=0;s<8;s++)x.fillRect(2+s*8,54,4,10);},                             // scramble
+  shrine:function(x){band(x,0,34,'#2f6d5a');band(x,34,10,'#3f7d67');band(x,44,20,'#6b8f5a');
+    x.fillStyle='#c0453a';x.fillRect(10,10,4,42);x.fillRect(38,10,4,42);x.fillRect(6,10,40,4);x.fillRect(4,7,44,3);
+    x.fillRect(8,18,36,3);x.fillStyle='#8a2f27';x.fillRect(22,8,8,3);                                  // torii
+    x.fillStyle='rgba(20,60,45,.5)';x.fillRect(52,20,10,24);},
+  skytree:function(x){band(x,0,44,'#bfe3f2');band(x,44,6,'#a9d6ee');band(x,50,14,'#7a8fa0');
+    x.fillStyle='#dfeaf1';for(var y=6;y<50;y++){var w=1+Math.floor((y-6)/9);x.fillRect(31-w,y,w*2+1,1);}
+    x.fillStyle='#8fb2c9';x.fillRect(28,20,7,2);x.fillRect(27,32,9,2);
+    x.fillStyle='#7fdcff';x.fillRect(31,3,2,4);
+    x.fillStyle='rgba(255,255,255,.6)';x.fillRect(6,10,8,3);x.fillRect(50,16,9,3);},
+  tower:function(x){band(x,0,30,'#f2a95a');band(x,30,12,'#e8834a');band(x,42,8,'#c96a44');band(x,50,14,'#4a3a45');
+    x.fillStyle='#e2584d';for(var y=6;y<50;y++){var w=1+Math.floor((y-6)/7);x.fillRect(31-w,y,w*2+1,1);}
+    x.fillStyle='#f4f0e6';x.fillRect(26,26,11,2);x.fillRect(24,40,15,2);
+    x.fillStyle='#ffd98a';x.fillRect(30,3,3,4);},
+  sakura:function(x){band(x,0,36,'#f7d0e0');band(x,36,10,'#f2c0d6');band(x,46,18,'#6f8f5a');
+    x.fillStyle='#7a4a30';x.fillRect(12,30,4,18);x.fillRect(9,40,3,8);x.fillRect(16,38,3,10);
+    var pk=['#f3a6c8','#ef8fb8','#f8c2da'];for(var i=0;i<40;i++){x.fillStyle=pk[i%3];
+      var cx=4+(i*7)%22,cy=8+((i*5)%22);x.fillRect(cx,cy,4,4);}
+    x.fillStyle='#f8c2da';x.fillRect(40,14,2,2);x.fillRect(50,26,2,2);x.fillRect(46,40,2,2);x.fillRect(56,20,2,2);},
+  water:function(x){band(x,0,26,'#bfe0ef');band(x,26,6,'#9fd0e6');band(x,32,32,'#4f86b0');
+    x.fillStyle='#7c9fbf';x.fillRect(4,16,8,10);x.fillRect(16,12,6,14);x.fillRect(40,14,10,12);x.fillRect(52,10,6,16);
+    x.fillStyle='#e8e2d0';x.fillRect(0,30,64,3);x.fillStyle='#cfcab8';x.fillRect(10,20,3,10);x.fillRect(50,20,3,10);
+    x.fillStyle='#e8e2d0';for(var i=0;i<12;i++)x.fillRect(4+i*5,26+((i%2)?1:0),1,4);
+    x.fillStyle='rgba(255,255,255,.35)';for(var w=0;w<10;w++)x.fillRect((w*13)%60,40+((w*7)%20),6,1);},
+  onsen:function(x){band(x,0,30,'#e9c7a0');band(x,30,10,'#d9a882');band(x,40,24,'#6e5a6a');
+    x.fillStyle='#6a2f34';x.fillRect(8,20,48,6);x.fillStyle='#8a3f44';x.fillRect(6,24,52,4);
+    x.fillStyle='#c99a6a';x.fillRect(12,28,40,12);x.fillStyle='#e2584d';x.fillRect(26,30,12,2);
+    x.fillStyle='#3a2730';x.fillRect(26,32,12,8);                                                      // noren door
+    x.fillStyle='rgba(255,255,255,.7)';x.fillRect(18,10,3,3);x.fillRect(20,6,3,3);x.fillRect(42,12,3,3);
+    x.fillRect(44,7,3,3);x.fillRect(31,4,3,3);                                                          // steam
+    x.fillStyle='#5aa9c0';x.fillRect(0,48,64,16);x.fillStyle='rgba(255,255,255,.3)';x.fillRect(6,52,10,1);x.fillRect(40,56,12,1);},
+  park:function(x){band(x,0,30,'#bfe3f2');band(x,30,8,'#a9d6b0');band(x,38,26,'#5f9f5a');
+    x.fillStyle='#6fae60';x.fillRect(0,34,64,6);
+    x.fillStyle='#5a3a24';x.fillRect(14,34,4,12);x.fillStyle='#3f8f4a';x.fillRect(6,22,20,14);x.fillStyle='#4f9f5a';x.fillRect(9,19,14,8);
+    x.fillStyle='#4f86b0';x.fillRect(30,48,30,10);x.fillStyle='rgba(255,255,255,.3)';x.fillRect(34,51,8,1);
+    x.fillStyle='#9a9a8a';x.fillRect(48,38,4,8);
+    x.fillStyle='rgba(255,255,255,.7)';x.fillRect(44,8,10,3);x.fillRect(8,12,8,2);},
+};
+function drawScene(key){
+  const cv=$("#sceneBg");if(!cv)return;
+  const x=cv.getContext("2d");x.imageSmoothingEnabled=false;x.clearRect(0,0,64,64);
+  (BG[key]||BG.station)(x);
+}
 
 /* ---------------- helpers ---------------- */
 const $=s=>document.querySelector(s);
@@ -789,9 +940,23 @@ function buildQueue(mons){
   return q.map(o=>o.m);
 }
 function startStation(st){
-  const queue=buildQueue(st.mons);
-  if(!queue.length){toast("この駅は クリア済み！");return;}
-  B={station:st,lv:st.line,boss:st.boss,queue,idx:0,hearts:5,maxHearts:5,defeated:[],caught:[],correct:0,total:0,_cleared:stationCleared(st)};
+  // the station's own yōkai always rides first; then fold in a few due reviews
+  // from the same level so spaced repetition keeps working as you travel the line
+  const own=st.mons;
+  const t=todayNum();
+  const reviews=byLevel(st.lv)
+    .filter(m=>!own.includes(m))
+    .map(m=>({m,s:srsOf(m.id)}))
+    .filter(o=>o.s.seen && o.s.due<=t && !o.s.mastered)
+    .sort((a,b)=>a.s.due-b.s.due)
+    .slice(0,4)
+    .map(o=>o.m);
+  const queue=[...own,...reviews];
+  B={station:st,lv:st.lv,line:st.line,boss:st.boss,queue,idx:0,hearts:5,maxHearts:5,defeated:[],caught:[],correct:0,total:0,_cleared:stationCleared(st)};
+  drawScene(st.scene);
+  const dot=$("#placardDot");if(dot)dot.style.background=st.color;
+  const pj=$("#placardJp");if(pj)pj.textContent=st.jp;
+  const pr=$("#placardRom");if(pr)pr.textContent=st.rom;
   show("battle");
   nextFoe();
 }
@@ -924,11 +1089,20 @@ function checkBadge(){
   // did this station just get fully pacified?
   if(B.station && !B._cleared && stationCleared(B.station)){
     B._cleared=true;
-    toast("🏮 "+B.station.name+" クリア！",2000);
-    // terminus boss cleared → the whole line is conquered
-    if(B.station.boss && !S.badges[B.lv]){
-      S.badges[B.lv]=true;save();
-      setTimeout(()=>toast("🏅 "+B.station.lineEn+" せいは！",2400),600);
+    const st=B.station;
+    toast("🏮 "+st.jp+" クリア！",2000);
+    // line terminus cleared → award the line badge
+    if(st.boss){
+      S.lines=S.lines||{};
+      if(!S.lines[st.line]){
+        S.lines[st.line]=true;save();
+        setTimeout(()=>toast("🏅 "+st.lineEn+" 完乗！",2400),600);
+      }
+      // the final stop of a whole level (Tokyo Tower / 迎賓館) opens the next network
+      if(st.idx===LAST_IDX[st.lv] && !S.badges[st.lv]){
+        S.badges[st.lv]=true;save();
+        setTimeout(()=>toast("🎌 "+st.lv+" 全線 制覇！",2600),1300);
+      }
     }
   }
 }
@@ -980,43 +1154,44 @@ function goMap(){
   show("map");applyFuri();
   $("#streakPill").textContent="🔥 "+(S.streak||0);
   const host=$("#routeList");host.innerHTML="";
-  LINES.forEach(line=>{
-    const sts=STATIONS.filter(s=>s.line===line.key);
+  TLINES.forEach(line=>{
+    const sts=STATIONS.filter(s=>s.line===line.code);
     const lineDone=sts.every(stationCleared);
+    const locked=(line.lv==="N4" && !levelUnlocked("N4"));
+    const masteredN=sts.filter(stationCleared).length;
     const wrap=document.createElement("div");
-    wrap.className="line"+(lineDone?" done":"");
-    let html=`<div class="linehead">
-        <span class="linebadge" style="background:${line.color}"></span>
-        <span class="linetitle">${line.name} <small>${line.en}・${line.key}</small></span>
-        ${lineDone?'<span class="linestamp">🏅 せいは</span>':''}
-      </div><div class="track">`;
+    wrap.className="mline"+(lineDone?" done":"")+(locked?" locked":"");
+    let html=`<div class="mlinehead">
+        <span class="bullet" style="background:${line.color}">${line.jp[0]}</span>
+        <span class="mlinetitle">${line.jp}<small>${line.en}・${line.lv}</small></span>
+        ${lineDone?'<span class="mlinestamp">🏅 完乗</span>'
+          :locked?'<span class="mlinelock">🔒 N5 全線で 開通</span>':''}
+      </div><div class="mtrack" style="--rail:${line.color}">`;
     sts.forEach(st=>{
-      const i=st.idx, open=stationUnlocked(i), cleared=stationCleared(st), pr=stationProg(st);
+      const i=st.idx, open=stationUnlocked(i), cleared=stationCleared(st);
       const state=cleared?"cleared":open?"open":"locked";
-      const face=cleared?"🏮":st.boss?"⛩":open?"●":"🔒";
-      const status=cleared?"クリア":open?(st.boss?"ボス":"あそぶ"):"ロック";
-      html+=`<button class="station ${state}${st.boss?' boss':''}" data-st="${i}" ${open?'':'disabled'}>
-          <span class="node">${face}</span>
-          <span class="stinfo">
-            <span class="stname">${st.name}<small>${st.en}</small></span>
-            <span class="stprog">${open?`${pr.done}/${pr.total} マスター`:'まだ 開通していない'}</span>
-          </span>
-          <span class="stgo">${open?(cleared?'⟳':'▶'):''}<em>${status}</em></span>
+      const face=cleared?"🏮":st.boss?"⛩":open?"":"🔒";
+      html+=`<button class="mstation ${state}${st.boss?' boss':''}" data-st="${i}" ${open?'':'disabled'}
+          title="${st.rom} — ${st.mon?st.mon.gloss:''}">
+          <span class="rail"></span>
+          <span class="dot">${face}</span>
+          <span class="slabel">${st.jp}</span>
+          <span class="srom">${st.rom}</span>
         </button>`;
     });
-    html+=`</div>`;
+    html+=`</div><div class="mlinefoot">${locked?'まだ 開通していない路線':`${masteredN}/${sts.length} 駅 マスター`}</div>`;
     wrap.innerHTML=html;
     host.appendChild(wrap);
   });
   // future line teaser
   const soon=document.createElement("div");
-  soon.className="line soon";
-  soon.innerHTML=`<div class="linehead">
-      <span class="linebadge" style="background:var(--t-ghost)"></span>
-      <span class="linetitle">奈落線 <small>ABYSS LINE・N3</small></span>
-    </div><div class="soonnote">まだ 開通していない路線。近日 開通。</div>`;
+  soon.className="mline soon";
+  soon.innerHTML=`<div class="mlinehead">
+      <span class="bullet" style="background:var(--t-ghost)">奈</span>
+      <span class="mlinetitle">奈落線<small>ABYSS LINE・N3</small></span>
+    </div><div class="soonnote" style="margin:12px 14px">まだ 開通していない路線。近日 開通。</div>`;
   host.appendChild(soon);
-  host.querySelectorAll(".station:not([disabled])").forEach(b=>{
+  host.querySelectorAll(".mstation:not([disabled])").forEach(b=>{
     b.onclick=()=>{sSelect();startStation(STATIONS[+b.dataset.st]);};
   });
 }

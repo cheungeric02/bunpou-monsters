@@ -1,7 +1,7 @@
 {
   "name": "妖怪文法 — Yōkai Bunpō",
   "short_name": "妖怪文法",
-  "description": "Battle JLPT grammar as wild yōkai along the Spirit Line. Pacify them, record them in your bestiary, master the language.",
+  "description": "Ride the Tokyo rail network battling JLPT grammar as wild yōkai — one at every landmark station. Pacify them, record them in your bestiary, master the language.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
