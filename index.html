@@ -241,6 +241,10 @@
   ruby rt{font-size:.55em;color:var(--ink-soft);font-weight:400}
   .no-furi rt{visibility:hidden}
 
+  /* pixel-art sprites (16×16 upscaled crisp) */
+  .pxs{image-rendering:pixelated;image-rendering:crisp-edges;display:inline-block;vertical-align:middle}
+  .dexcell .spr .pxs{margin:0 auto}
+
   .primaryb{font-family:var(--font-px);font-size:11px;background:var(--red);color:#fff;border:3px solid var(--ink);
     border-radius:8px;padding:14px 22px;cursor:pointer;letter-spacing:1px;box-shadow:3px 3px 0 var(--ink)}
   .primaryb:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink)}
@@ -276,7 +280,7 @@
     <section class="view" id="title">
       <div class="logo">GRAMMAR<br>MONSTERS</div>
       <div class="jp-logo">文法モンスターズ</div>
-      <div class="starter">🐣</div>
+      <div class="starter" id="starterSprite">🐣</div>
       <div class="tag">Battle JLPT grammar as wild monsters. Beat them, catch them, master the language.</div>
       <div class="press">▶ PRESS START</div>
       <div class="savenote" id="saveLine">New trainer — a fresh adventure awaits.</div>
@@ -306,7 +310,7 @@
           <div class="hpwrap"><span class="hpx">HP</span><div class="hptrack"><span id="foeHp"></span></div></div>
         </div>
         <div class="foe-status" id="foeSprite">👾</div>
-        <div class="me-status">🧑‍🎓</div>
+        <div class="me-status" id="meSprite">🧑‍🎓</div>
         <div class="pbox me-info">
           <div class="row1"><span class="me-name">TRAINER</span></div>
           <div class="hearts" id="myHearts">❤️❤️❤️❤️❤️</div>
@@ -576,6 +580,82 @@ const DEX = [
 ]},
 ];
 
+/* =========================================================
+   PIXEL SPRITES  —  Tokyo Spirit Line bestiary (N5, 16×16)
+   Each mon id maps to a yōkai; N4 falls back to its emoji.
+   ========================================================= */
+const SPR_PAL={
+  K:"#241b2e",o:"#3d2f4a",H:"#ffffff",P:"#ff9ecb",W:"#f7f2e8",N:"#2a2230",
+  R:"#e2584d",r:"#b23b36",O:"#ef9a3f",j:"#c9772a",Y:"#f2c744",
+  U:"#4f7fd0",u:"#3a5fa0",V:"#5fae7a",v:"#43855c",q:"#bfe3e0",
+  G:"#9aa3b0",g:"#727b89",m:"#c9b38a",M:"#a8916a",
+  D:"#9a6a3c",d:"#6f4a28",T:"#b98a52",t:"#8f6438",
+  B:"#2f3550",b:"#474d6e",X:"#8a6fb0",x:"#6b5390",
+  C:"#eef0ea",S:"#cdd4dd",s:"#98a2ae",L:"#7bb25a"
+};
+const SPR={
+  /* ---- LOCAL 各駅停車 ---- */
+  desu:["....oKKKKo......","..oKCCCCCCKo....",".oCCCCCCCCCCo...","oCCCCCCCCCCCCo..","oCCKHKCCKHKCCo..","oCCKKKCCKKKCCo..","oCCCPPCCPPCCCo..","oCCCCoooooCCCo..",".oCCCCCCCCCCo...","..oCCCCCCCCo....","...oCCCCCCo.....","....oCCCCo......","....oCCCCo......",".....oCCo.......","................"],
+  wo:["...S............","...Ss...........","...SsS..........","...SssS.........","...SsssS........","...SssssS.......","...SsssssS......","...SKHssKHS.....","...SKKssKKS.....","...SsPPsPPs.....","...SssssssS.....","...SssssssS.....","..oDDDDDDDDo....","...DDDDDDDD.....","...dDDDDDDd.....","...dd....dd....."],
+  mo:["................","....oKKKKo......","...oWWWWWWo.....","..oWWWWWWWWo....","..oWKHWWKHWo....","..oWKKWWKKWo....","..oWWPPPPWWo....","..oWWWWWWWWo....","...oWWWWWWo.....","..oWo....oWo....",".oWo......oWo...",".oYRYRYRYRYo...",".oYRRRRRRRYo...","..oYRRRRRYo....","...oYYYYYo.....","....ooooo......."],
+  "ni-de":["................","................",".....BBBBB......","...BBBBBBBBB....","..BBBBBBBBBBB...","..BBBBBBBBBBB...",".BBWWWBBBWWWBB..",".BBWKWBBBWKWBB..",".BBBBBBBBBBBBB..",".BBBBBBBBBBBBB..",".BBBBBBBBBBBBB..","..BBBBBBBBBBB...","..bBBBBBBBBBb...","...bb.....bb....","..KK.......KK..","................"],
+  "kara-made":["..G........G....",".GgG......GgG...",".GGGo....oGGG...",".GGGGgggggGGG..",".GGWWWWWWWWGG..","GGGGGGGGGGGGGG.","GGKHGGGGGGKHGG.","GGKKGGGGGGKKGG.","GGWWGGNNGGWWGG.",".GGWWWNNWWWGG..",".GGGWHHWGGGG...","..GGGGGGGGGGg..",".GGGGGGGGGGGGg.",".Gg.GG..GG.gGg.","..g..........g.","................"],
+  tai:["...o......o.....","..oKo....oKo....","..oOOo..oOOo....",".oOOOOooOOOOo...",".oOWWWWWWWWOo...","oWWWWWWWWWWWWo..","oWKHKWWWWKHKWo..","oWKKKWWWWKKKWo..","oWWPPWNNWPPWWo..",".oWWWWWWWWWWo...","..oWWWWWWWWo....","..oOWWWWWWOo....",".oOOWWWWWWOOo...",".oo.OO..OO.oo...","................"],
+  hoshii:["......LL........",".....LLL........","..T..oLo..T.....",".TTToooooTTT....",".TTTTTTTTTTTT...","TTTTTTTTTTTTTT..","TKKHTTTTTTKKHT.","TKKKTTTTTTKKKT.","TTWWTTNNTTWWTT.",".TTTTWNNWTTTT..",".TTTCCCCCCTTT..","TTTCCCCCCCCTTT.","TTTCCCCCCCCTTT.",".TTCCCCCCCCTT..",".TTt......tTT..","..tt......tt..."],
+  /* ---- RAPID 快速 ---- */
+  masenka:["..W........W...","..WU......UW...","..UUU....UUU...",".KKUUUUUUUUKK..",".KUUUUUUUUUUK..",".UUUUUUUUUUUU..",".UUKHUUUUKHUU..",".UUKKUUUUKKUU..",".UUUUWNNWUUUU..",".UUWWWWWWWWUU..",".UUWKWWWWKWUU..",".UUUUUUUUUUUU..",".uUUUUUUUUUUu..","..YYYYYYYYYY...","..YKYKYKYKYK...","..u..u..u..u..."],
+  masho:[".T........T..",".TtT......TtT",".TTTTTTTTTTTT",".TTTTTTTTTTTT",".TTKHTTTTKHTT",".TTKKTTTTKKTT",".TTWWWNNWWWTT",".TTTWWWWWWTTT",".TTTTWWWWTTTT",".TTTTTTTTTTTT","..TWWWWWWWWT.","..TWWWWWWWWT.","..TTWWWWWWTTT","..TT.WWWW.TtT","..Tt.WWWW.tT.","...t......t.."],
+  teiru:["....qqqqqq.....","...qHHHHHHq....","..VVVVVVVVVV...",".VVVVVVVVVVVV..",".VVKHVVVVKHVV..",".VVKKVVVVKKVV..",".VVVYYYYYYVVV..",".VVVYKKKKYVVV..",".VVVVVVVVVVVV..",".VVvVVVVVVvVV..","VvV.VVVVVV.VvV.",".VVqqVVVVqqVV..",".VvqqqqqqqqvV..",".VVvqqqqqqvVV..",".VVv......vVV..","..vv......vv..."],
+  tekudasai:["....KKKKKK.....","...RRRRRRRR....","..RRRRRRRRRR...","..KKKKKKKKKK...","..RRRRRRRRRR...","..RRWWHWWRRR...","..RRWKKKWRRR...","..KKKKKKKKKK...","..RRRRRRRRRR...","..RRRKKKRRRR...","..RRKPPPPKRR...","..KKKKKKKKKK...","...YYYYYYYY....",".....PPPP......",".....PPPP......","......PP......."],
+  temoii:["..M..MM..M.....",".MmM.mm.MmM....",".mmmmmmmmmmm...","MmmmmmmmmmmmM..","MmmmmmmmmmmmM..","MmmKHmmmmKHmM..","MmmKKmmmmKKmM..","MmmmmmNNmmmmM..",".mmmmKKKKmmmm..",".mmmKWWWWKmmm..",".MmmmmmmmmmM...","..MmmmmmmmM....",".MmM.mmmm.MmM..",".Mm..mm...mM...","..M...MM...M...","..............."],
+  tewaikenai:[".............",".mmmmmmmmmmmm.",".mMmMmMmMmMmM.",".mmmmmmmmmmmm.",".mmKHmmmmKHmm.",".mmKKmmmmKKmm.",".mmmmmWWmmmmm.",".mMmMmMmMmMmM.",".mmmmmmmmmmmm.",".mMmMmMmMmMmM.",".mmmmmmmmmmmm.",".mMmMmMmMmMmM.",".mmmmmmmmmmmm.",".MM........MM.",".MM........MM.","............."],
+  tekara:["......X.......",".....XXX......","....XXXXX.....","...XXXXXXX....","..XxXXXXXxX...",".XXXXXXXXXXX..",".KxKxKxKxKxK..","....XXXXX.....","...XWWHWWX....","...XWKKKWX....","....KPPPK.....",".....PPP......","......D......","......D......",".....DdD......","....dd.dd...."],
+  nakereba:[".W..........W",".WR........RW",".RRR......RRR","KKRRRRRRRRRRKK","KRRRRRRRRRRRRK",".RRRRRRRRRRRR.",".RRHWRRRRHWRR.",".RRWKRRRRWKRR.",".RRRRWNNWRRRR.",".RRWWWWWWWWRR.",".RRWKWWWWKWRR.",".rRRRRRRRRRRr.",".RRRRRRRRRRRR.","..YYYYYYYYYY..","..YKYKYKYKYK..","..r..r..r..r.."],
+  /* ---- EXPRESS 急行 ---- */
+  nakutemo:[".............","....OOOOOO...","...OOOOOOOO..","..OOOOOOOOOO.","..OOKHOOKHOO.","..OOKKOOKKOO.","..OOOOOOOOOO.","..OOKKKKKKOO.","..OOKPPPPKOO.","...OPPPPPPO..","...jPPPPPPj..","..OjPPPPPPjO.","..O.PPPPPP.O.","....PPPPPP...",".....PPPP....","......PP....."],
+  maeni:["....gGGGg....","...GGGGGGGG..","..GGGGGGGGGG.","..GGGGGGGGGG.","..GGGGGGGGGG.","..GGKGGGGKGG.","..GGGGKKGGGG.","..GGGGGGGGGG.","..gGGGGGGGGg.","...RRRRRRRR..","..RRRRRRRRRR.","..RRRRRRRRRR.","..GgggggggG..","..GggggggggG.","..GggggggggG.","...ggGGGGg..."],
+  atode:[".............","....WWWWWW...","...WWWWWWWW..","..WWWWWWWWWW.","..WWWWWWWWWW.","..WWWWHHWWWW.","..WWWHKKHWWW.","..WWWHKKHWWW.","..WWWWHHWWWW.","..WWWKKKKWWW.","..WWWKPPKWWW.","...WWWWWWWW..","..TTTTTTTTTT.","..TTTTTTTTTT.","..TtTTTTTTtT.","...tt....tt.."],
+  nagara:["...CCCC......","..CCCCCC.....","..CKHCKHC....","..CKKCKKC....","..CCCCCCCC...","...CCCCCCCC..","....CCCCCCCC.","....gCCCCCCC.","...CCCCCCCg..","..CCCCCCg....",".CCCCCCg.....",".CCCCCg......","..gCCCCC.....","...gCCCCCg...","....gCCCg....",".....ggg....."],
+  takoto:["...KKKKKKKK..","..KKKKKKKKKK.","..KKKKKKKKKK.","..KKWWWWWWKK.","..KWWWWWWWWK.","..KWKHWWKHWK.","..KWKKWWKKWK.","..KWPPWWPPWK.","..KWWWNNWWWK.","..KKWWWWWWKK.","...RRRRRRRR..","..RRRWWWWRRR.","..RRRRRRRRRR.","..RRRRRRRRRR.","..RrR....RrR.","...W......W.."],
+  tari:[".t..........t.",".tWt......tWt.",".WWWWWWWWWWWW.",".WWWWWWWWWWWW.",".WWKHWWWWKHWW.",".WWKKWWWWKKWW.",".WWWWtNNtWWWW.",".WWWWWWWWWWWW.",".RRRRRRRRRRRR.","..WWWWWWWWWW..","..WWWWWWWWWW..","..WWWWWWWWWWt.","..WWWWWWWWtWt.","..tWWWWWWtWt..","...t....t.t..","............."],
+  toomou:[".............","...BBBBBBBB..","..BBBBBBBBBB.",".BBBBBBBBBBBB.",".BBKHBBBBKHBB.",".BBKKBBBBKKBB.",".BBBBBBBBBBBB.",".BBBBBWWBBBBB.",".BBBBBbbBBBBB.","..BBBBbbBBBB..","..W.Bbb.W....","..BBBbbbBBB...",".BBBBBBBBBBBB.",".BBbBBBBBBbBB.",".Bb.BB..BB.bB.","..b..b..b..b.."],
+  toiu:["...KKKKKK....","..KKKKKKKK...","..KWWWWWWK...","..WWKHKHWW...","..WWKKKKWW...","..WWPWWPWW...","..KWWWWWWK...","....WWWW.....","....WWWW.....","....WWWW.....","....WWWW.....","...XXXXXX....","..XXXXXXXX...","..XXXWWXXX...","..XXXXXXXX...","..xXX..XXx.."],
+  /* ---- LTD. EXPRESS 特急 ---- */
+  desho:["...KKKKKK....","..KKKKKKKK...","..RRRRRRRRR..",".RRRRRRRRRRR.",".RRKHRRRRKHRR",".RRKKRRRRKKRR",".RRRRRRRRRRRR",".RRRRROORRRRR",".RRRRROORRRRR",".RRRRROORRRRR",".RRRRROORRRRR",".KRRRRRRRRRRK",".KKRKKKKKKRKK","..KKKKKKKKKK","...KKKKKKKK..","....K....K.."],
+  hoga:["...VVVVVV....","..VVVVVVVV...",".VVVWWWWVVV..",".VVWKHKHWVV..",".VVWKKKKWVV..",".VVVYYYYVVV..",".VVVvYYvVVV..",".VVVVVVVVVV..",".VqVqVqVqVq..",".VVVVVVVVVV..",".VqVqVqVqVq..","..VVVVVVVV...","..VvVVVVvV...",".Vv.Vv.vV....",".v..v..v.....","............."],
+  tsumori:[".GGGGGGGGGGGG.",".GGGGGGGGGGGG.",".GGGGGGGGGGGG.",".GKGKGGGKGKGG.",".GGGGGGGGGGGG.",".GKKGGGGGKKGG.",".GGGGGGGGGGGG.",".gGGGGGGGGGGg.",".GGGGGGGGGGGG.",".GmGmGmGmGmGG.",".GGGGGGGGGGGG.",".GGGGGGGGGGGG.",".gGGGGGGGGGGg.",".mMmMmMmMmMmM.",".MMMMMMMMMMMM.",".gg........gg."],
+  "kara-r":["..D........D..",".DDD......DDD.",".DDDDDDDDDDDD.",".DDRRRRRRRRDD.",".DRRRRRRRRRRD.",".DRRKHRRKHRRD.",".DRRKKRRKKRRD.",".DRRRRNNRRRRD.",".DRRRWWWWRRRD.",".DDRRRRRRRRDD.",".DDDDDDDDDDDD.",".DDdDDDDDDdDD.","DdD.DDDDDD.DdD",".DD.DDDDDD.DD.",".Dd..d..d..dD.","..d..d..d..d.."],
+  node:[".............",".RRRRRRRRRR..",".RRRRRRRRRRC.",".RRRRRRRRRRC.",".RRKHRRKHRRC.",".RRKKRRKKRRC.",".RRRRRRRRRRC.",".RRRPPPPRRRC.",".RRRRRRRRRRC.",".RRRRRRRRRRC.",".RRRRRRRRRRC.",".RRRRRRRRRRC.",".CCCCCCCCCCC.",".KKKKKKKKKK..","..R......R...","............."],
+  kedo:["......Y......","......Y......","...KKKKKK....","..RRRRRRRR...","..RRRRRRRRR..","..RRKHRRKHRR.","..RRKKRRKKRR.","..RRRRNNRRRR.","..RRKKKKKKRR.","..RRWKWKWKR..","..RRRRRRRRR..",".RR.RRRR.RR..","R...RRRR...R.","....rRRr.....","...r..r......","............."],
+  tara:[".....BBBB....","...BBBBBBBB..","..BBBBBBBBBB.",".BBBBBBBBBBBB.",".BBBBBBBBBBBB.",".BBBBBBBBBBBB.",".BBWWWBBWWWBB.",".BBWKWBBWKWBB.",".BBBBBBBBBBBB.",".BBBBBBBBBBBB.",".BBBBBBBBBBBB.","BBBBBBBBBBBBBB","BBBBBBBBBBBBBB",".qBBBBBBBBBBq.","qq.q.q.q.q.qq.",".q..q...q..q.."],
+  /* ---- NOZOMI のぞみ ---- */
+  ba:[".Y..Y..Y..Y..",".O..O..O..O..",".KKKKKKKKKKKK.","..KKKKKKKKKK..","..KWWWWWWWWK..","..KWKHWWKHWK..","..KWKKWWKKWK..","..KWWPWWPWWK..","..KWWWKKWWWK..","..KKWWWWWWKK..","...KKKKKKKK..","..CCCCCCCCCC.","..CCCCCCCCCC.","..CCCKKCCCCC.","..CKCCCCCCKC.","...K......K.."],
+  "to-cond":[".mmmmmmmmmmmm.",".mMmMmMmMmMmM.",".mWKmWKmWKmWm.",".mMmMmMmMmMmM.",".mmWKmmWKmmWm.",".mMmMmMmMmMmM.",".mWKmmWKmmWKm.",".mMmMmMmMmMmM.",".mmWKmWKmmWKm.",".mMmMmMmMmMmM.",".mWKmmWKmWKmm.",".mMmMmMmMmMmM.",".mmWKmmWKmmWm.",".mMmMmMmMmMmM.",".mmmmmmmmmmmm.",".M..........M."],
+  naru:[".D........D..",".DDD....DDD..",".DDDDDDDDDD..","DDDDDDDDDDDD.","DDKHDDDDKHDD.","DDKKDDDDKKDD.","DDDWWWWWWDDD.","DDDWNNWWWDDD.","DDDDWWWWDDDD.",".DDDDDDDDDD..",".DDWWWWWWDD..",".DDWWWWWWDD..",".DDWWWWWWDD..",".DdWWWWWWdD..",".Dd......dD.D","..d......d.DD"],
+  sugiru:["....WWWW.....","...WWWWWW....","...WKHKHWW...","...WKKKKWW...","...WWWNNWW...","...WWWWWWW...","....WWWW.....","....WWWW.....","....WWWW.....","...XWWWWX....","..XXWWWWXX...","..XXXXXXXX...",".XXXXXXXXXX..",".XXXXXXXXXX..","XXXXXXXXXXXX.","XxXXXXXXXXxX."],
+  yasui:[".............",".............","..TT......TT.",".TTTTTTTTTTTT","TTTTTTTTTTTTTT","TTKHTTTTTTKHTT","TTKKTTTTTTKKTT","TTTWWTNNTWWTTT","TTTTTWWWWTTTTT","TTTTTTTTTTTTTT","TtTTTTTTTTTTtT","Tt.tt.tt.tt.tT",".t..t..t..t...",".............",".............","............."],
+  kata:[".....SSSS....","....SSSSSS...","...SSSSSSSS..","..SSSSSSSSSS.","D.SSSSSSSSSS.D","DsSSSSSSSSSSsD",".sSSKHSSKHSs..",".sSSKKSSKKSs..",".sSSSSNNSSSSs.",".sSSWWWWWWSs..",".sSSSSSSSSSs..",".sSSSSSSSSSs..",".ssSSSSSSSss..","..sssSSSsss..","...ss....ss..","............."],
+  nogasuki:[".B.B......B.B.",".BbB......BbB.",".Bb.BBBBBB.bB.","...BBBBBBBB...","..BBBBBBBBBB..","..BYHBBBBYHB..","..BYKBBBBYKB..","..BBBBNNBBBB..","..BBWWWWWWBB..","..BBBBBBBBBB..","..RRRRYRRRRR..","..BBBBBBBBBB..","..BBBBBBBBBB..","..bBBBBBBBBb..","..bBB....BBb..","...b......b.."],
+  kotogadekiru:["......U......",".....UUU.....",".....UUU.....","....UUUUU....","....UqqqU....","...UqqqqqU...","...UKHqKHU...","...UKKqKKU...","..UqqqqqqqU..","..UqqPPPPqU..","..UqqqqqqqU..","...UuqqquU..","...UuuquuU..","....UuuuU...",".....UuU....","......u....."],
+  /* ---- player ---- */
+  trainer:["....KKKK......","...KKKKKKK....","..KKKKKKKKK...","..KKKKKKKKK...","..KWWWWWWWK...","...WWWWWWW....","..RRRRRRRRR...",".RRRDDDDRRRR..",".RRDDDDDDRRR..",".RRDDDDDDRRR..",".RRDDDDDDRRR..",".RRRRRRRRRRR..","..RRRRRRRRR...","..DDD..DDD...","..DD....DD...","..KK....KK..."]
+};
+const _sprCache={};
+function sprURL(id){
+  if(id in _sprCache)return _sprCache[id];
+  const g=SPR[id]; if(!g){return _sprCache[id]=null;}
+  const cv=document.createElement("canvas");cv.width=16;cv.height=16;
+  const x=cv.getContext("2d");x.imageSmoothingEnabled=false;
+  for(let y=0;y<g.length;y++){const row=g[y];for(let i=0;i<row.length;i++){const ch=row[i];if(ch==="."||ch===" ")continue;const col=SPR_PAL[ch];if(!col)continue;x.fillStyle=col;x.fillRect(i,y,1,1);}}
+  try{return _sprCache[id]=cv.toDataURL();}catch(e){return _sprCache[id]=null;}
+}
+/* returns a pixel <img> when we have art for this id, else the emoji */
+function sprMarkup(id,emoji,px){
+  const u=sprURL(id);
+  if(u)return `<img class="pxs" width="${px}" height="${px}" src="${u}" alt="">`;
+  return `<span style="font-size:${px}px;line-height:1">${emoji||""}</span>`;
+}
+
 /* ---------------- persistence ---------------- */
 const SAVE_KEY="grammar-monsters-v1";
 const todayNum=()=>{const d=new Date();return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5);};
@@ -670,7 +750,7 @@ function renderFoe(){
   $("#foeName").innerHTML=furi(m.jp);
   $("#foeLv").textContent="Lv."+lvl;
   const chip=$("#foeType");chip.textContent=ty.emoji+" "+ty.label;chip.style.background=ty.color;
-  $("#foeSprite").textContent=m.spr;
+  $("#foeSprite").innerHTML=sprMarkup(m.id,m.spr,72);
   updateFoeHp();
   renderHearts();
 }
@@ -785,7 +865,7 @@ function showCatchCard(m,st,then){
   $("#scrim").classList.remove("hidden");
   $("#scrim").innerHTML=`<div class="pbox card">
     <div style="text-align:center;font-family:var(--font-px);font-size:9px;color:var(--red)">✦ NEW! ✦</div>
-    <div class="spr">${m.spr}</div>
+    <div class="spr">${sprMarkup(m.id,m.spr,64)}</div>
     <h3>${furi(m.jp)}</h3>
     <div class="rd"><span class="typechip" style="background:${ty.color}">${ty.emoji} ${ty.label}</span> ・ ${m.lvl}</div>
     <div class="gloss">${m.gloss}</div>
@@ -799,7 +879,7 @@ function endRoute(cleared){
   markStreak();save();
   show("results");
   const acc=B.total?Math.round(B.correct/B.total*100):0;
-  const caughtHtml=B.caught.length?`<div class="caught-row">${B.caught.map((m,i)=>`<span class="c" style="animation-delay:${i*.08}s">${m.spr}</span>`).join("")}</div>`:"";
+  const caughtHtml=B.caught.length?`<div class="caught-row">${B.caught.map((m,i)=>`<span class="c" style="animation-delay:${i*.08}s">${sprMarkup(m.id,m.spr,34)}</span>`).join("")}</div>`:"";
   const title = cleared? "ROUTE CLEAR!" : "きぜつ… RETREAT";
   $("#results").innerHTML=`
     <div class="big">${title}</div>
@@ -874,7 +954,7 @@ function renderDexGrid(host,mons){
     else if(st.lapses>0||st.due<=todayNum())cls+=" weak";
     cell.className=cls;
     const masteryPct=st.seen?Math.min(100,st.reps/3*100):0;
-    cell.innerHTML=`<div class="spr">${st.seen?m.spr:"❓"}</div>
+    cell.innerHTML=`<div class="spr">${st.seen?sprMarkup(m.id,m.spr,30):"❓"}</div>
       <div class="nm">${st.seen?furi(m.jp):"？？？"}</div>
       <span class="st"><i style="width:${masteryPct}%"></i></span>`;
     if(st.seen)cell.onclick=()=>showDexCard(m);
@@ -886,7 +966,7 @@ function showDexCard(m){
   const status=st.mastered?"🏅 マスター":st.lapses>0?"⚠️ にがて":"📖 がくしゅうちゅう";
   $("#scrim").classList.remove("hidden");
   $("#scrim").innerHTML=`<div class="pbox card">
-    <div class="spr">${m.spr}</div>
+    <div class="spr">${sprMarkup(m.id,m.spr,64)}</div>
     <h3>${furi(m.jp)}</h3>
     <div class="rd"><span class="typechip" style="background:${ty.color}">${ty.emoji} ${ty.label}</span> ・ ${m.lvl}</div>
     <div class="gloss">${m.gloss}</div>
@@ -1031,6 +1111,8 @@ if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.se
 /* init */
 applyTheme();
 applyFuri();
+$("#starterSprite").innerHTML=sprMarkup("tai","🐣",84);   /* kitsune mascot */
+$("#meSprite").innerHTML=sprMarkup("trainer","🧑‍🎓",52);   /* back-view student */
 $("#soundBtn").textContent="SOUND:"+(S.sound?"ON":"OFF");
 updateSaveLine();
 show("title");

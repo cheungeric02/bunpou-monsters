@@ -1,5 +1,5 @@
 /* 文法モンスターズ service worker — bump CACHE on every page change so devices refetch */
-const CACHE = "bunpou-v1";
+const CACHE = "bunpou-v2";
 const ASSETS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
