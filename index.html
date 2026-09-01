@@ -1294,6 +1294,9 @@ function askQuestion(){
 }
 function answer(i,btn){
   const q=B.curQ;const correct=i===q.a;
+  // Stamp "played today" on real engagement (first answered question of the day) — not
+  // only at route completion, so a few battles you don't finish still count and sync to する.
+  if(S.lastPlay!==todayNum()){ markStreak(); save(); }
   B.total++;
   $("#dock").querySelectorAll(".choice").forEach(b=>b.disabled=true);
   if(correct){
