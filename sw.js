@@ -1,5 +1,5 @@
 /* 妖怪文法 / Yōkai Bunpō service worker — bump CACHE on every page change so devices refetch */
-const CACHE = "bunpou-v6";
+const CACHE = "bunpou-v7";
 const ASSETS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
