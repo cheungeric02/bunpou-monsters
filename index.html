@@ -1322,7 +1322,7 @@ function answer(i,btn){
     const right=$("#dock").querySelector(`.choice[data-i="${q.a}"]`);if(right)right.classList.add("correct");
     $("#arena").classList.add("shake");setTimeout(()=>$("#arena").classList.remove("shake"),350);
     B.hearts--;renderHearts();
-    B.foe.st.lapsedThisFight=true;
+    srsOf(B.foe.m.id).lapsedThisFight=true; // live ref — see defeatFoe note
     setTimeout(()=>{
       if(B.hearts<=0){ showExplain(q,false,()=>endRoute(false)); }
       else { showExplain(q,false,()=>{B.qpos++;askQuestion();}); }
@@ -1338,7 +1338,11 @@ function showExplain(q,ok,then){
   $("#contb").onclick=()=>{sSelect();then();};
 }
 function defeatFoe(){
-  const m=B.foe.m,st=B.foe.st;
+  const m=B.foe.m;
+  // resolve the SRS entry against the CURRENT S every time — a cloud sync can
+  // arrive mid-fight and rebuild S with fresh objects, orphaning B.foe.st; writing
+  // through a stale ref silently lost .seen (station never unlocked the next stop)
+  const st=srsOf(m.id); B.foe.st=st;
   // SRS update
   const wasNew=!st.seen;st.seen=true;
   if(st.lapsedThisFight){ st.ease=Math.max(1.6,st.ease-0.2); st.lapses++; st.reps=Math.max(0,st.reps); }
@@ -1639,7 +1643,11 @@ window.__bm={
   applyRemote:(remote)=>{
     if(!remote)return;
     const merged=mergeState(S,remote);
-    S=merged;save(false);reRenderCurrent();
+    S=merged;
+    // S was just rebuilt with fresh objects — re-point any live battle's SRS ref
+    // so an in-progress fight keeps writing to the current state, not orphaned copies
+    if(typeof B!=="undefined"&&B&&B.foe&&B.foe.m)B.foe.st=srsOf(B.foe.m.id);
+    save(false);reRenderCurrent();
     // share our union back so the other device converges (idempotent → RTDB stops when equal)
     if(JSON.stringify(cloudClean(merged))!==JSON.stringify(remote))cloudPush();
   },
