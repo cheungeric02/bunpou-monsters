@@ -1258,22 +1258,30 @@ function renderHearts(){
 }
 
 /* typewriter dialogue in the dock */
-let twTimer=null;
+let twTimer=null, twFlush=null;
 function dialogue(text,then){
   const dock=$("#dock");
   dock.innerHTML='<div class="dialogue" id="dlg"></div>';
   const el=$("#dlg");
   const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
   clearInterval(twTimer);
-  if(reduce){el.textContent=text;afterDlg(then);return;}
+  // finish exactly once — extra taps (or a timer that fires after completion) can't
+  // double-fire `then`, which used to skip the next foe / run the route past its end
+  let fired=false;
+  const done=()=>{ if(fired)return; fired=true; clearInterval(twTimer); el.textContent=text; twFlush=null; afterDlg(then); };
+  twFlush=done;                          // recovery hook if the app is backgrounded mid-line
+  if(reduce){ done(); return; }
   let i=0;
   twTimer=setInterval(()=>{
     el.textContent=text.slice(0,++i);
-    if(i>=text.length){clearInterval(twTimer);afterDlg(then);}
+    if(i>=text.length){ done(); }
   },26);
-  el.onclick=()=>{clearInterval(twTimer);el.textContent=text;afterDlg(then);};
+  el.onclick=done;
 }
 function afterDlg(then){ if(then) setTimeout(then,320); }
+// if timers were throttled while the phone was backgrounded mid-line, finish the
+// line as soon as we're visible again so a battle can never freeze half-typed
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden && twFlush) twFlush(); });
 
 function askQuestion(){
   if(!B||!B.foe)return;               // guard against timers firing after leaving battle
